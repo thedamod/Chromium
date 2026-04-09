@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Download, FileImage } from "lucide-react";
+import { Button } from "#/components/ui/button";
+import { Card, CardContent } from "#/components/ui/card";
+import HomeLink from "#/components/HomeLink";
+import { Input } from "#/components/ui/input";
+import { Label } from "#/components/ui/label";
 import {
-	blobToDataUrl,
 	createIcoBlobFromDataUrl,
 	downloadBlob,
 	fileNameWithoutExtension,
@@ -23,9 +26,6 @@ export const Route = createFileRoute("/ico")({
 function IcoPage() {
 	const [source, setSource] = useState<ImageState | null>(null);
 	const [icoReady, setIcoReady] = useState<Blob | null>(null);
-	const [status, setStatus] = useState(
-		"Upload a source image to generate a favicon-ready ICO file.",
-	);
 	const [error, setError] = useState("");
 
 	async function handleUpload(file: File | null) {
@@ -33,6 +33,8 @@ function IcoPage() {
 
 		try {
 			const dataUrl = await readFileAsDataUrl(file);
+			// Process using the pure utility structure; since it uses DOM (Canvas),
+			// it runs safely on the main thread
 			const icoBlob = await createIcoBlobFromDataUrl(dataUrl);
 			setSource({
 				dataUrl,
@@ -40,87 +42,63 @@ function IcoPage() {
 				sizeLabel: formatBytes(file.size),
 			});
 			setIcoReady(icoBlob);
-			setStatus(`ICO ready at 256x256 from ${file.name}.`);
 			setError("");
 		} catch (e) {
-			setError(e instanceof Error ? e.message : "ICO conversion failed.");
+			setError(e instanceof Error ? e.message : "Conversion failed.");
 		}
 	}
 
 	return (
-		<main className="page-wrap px-4 py-8">
-			<div className="mx-auto max-w-2xl">
-				<div className="mb-8 flex items-center gap-4">
-					<div className="flex size-12 items-center justify-center rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)]">
-						<FileImage size={24} />
-					</div>
-					<div>
-						<h1 className="text-2xl font-bold text-[var(--foreground)]">
-							Image to ICO
-						</h1>
-						<p className="text-[var(--muted-foreground)]">
-							Convert images to ICO format for favicons
-						</p>
-					</div>
-				</div>
-
-				<div className="rounded-xl border border-[var(--border)] p-6">
-					<h2 className="mb-4 font-semibold text-[var(--foreground)]">
-						Upload Source Image
-					</h2>
-					<label className="block">
-						<span className="sr-only">Choose image</span>
-						<input
+		<main className="flex items-center justify-center p-4 min-h-screen bg-background text-foreground">
+			<div className="w-full max-w-sm flex flex-col gap-6">
+				<HomeLink />
+				<Card className="w-full border-0 shadow-none bg-transparent">
+				<CardContent className="flex flex-col gap-6 p-0">
+					<div className="flex flex-col gap-2">
+						<Label htmlFor="image-upload" className="font-medium">
+							Upload Image
+						</Label>
+						<Input
+							id="image-upload"
 							type="file"
 							accept="image/*"
-							className="block w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-2 text-sm"
 							onChange={(e) => handleUpload(e.target.files?.[0] ?? null)}
 						/>
-					</label>
+					</div>
 
 					{source && (
-						<div className="mt-4 space-y-3">
-							<div className="flex justify-between text-sm text-[var(--muted-foreground)]">
-								<span>{source.filename}</span>
+						<div className="flex flex-col gap-2">
+							<div className="flex justify-between text-xs text-muted-foreground opacity-70">
+								<span className="truncate max-w-[200px]">
+									{source.filename}
+								</span>
 								<span>{source.sizeLabel}</span>
 							</div>
 							<img
 								src={source.dataUrl}
-								alt=""
-								className="max-h-48 rounded-lg object-contain"
+								alt="Preview"
+								className="max-h-48 w-full object-contain rounded-md border bg-muted/20"
 							/>
 						</div>
 					)}
 
-					<div className="mt-6">
-						<p className="text-sm text-[var(--muted-foreground)]">{status}</p>
-						<p className="mt-2 text-sm text-[var(--muted-foreground)]">
-							This exporter wraps a 256x256 PNG payload inside an ICO container,
-							which works well for modern favicon and desktop icon use cases.
-						</p>
-					</div>
-
-					{error && (
-						<p className="mt-4 text-sm text-[var(--destructive)]">{error}</p>
-					)}
+					{error && <p className="text-sm text-destructive">{error}</p>}
 
 					{icoReady && source && (
-						<button
-							type="button"
-							className="mt-4 flex items-center gap-2 rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] transition hover:opacity-90"
+						<Button
+							className="w-full"
 							onClick={() => {
-								if (icoReady && source) {
-									downloadBlob(
-										icoReady,
-										`${fileNameWithoutExtension(source.filename)}.ico`,
-									);
-								}
+								downloadBlob(
+									icoReady,
+									`${fileNameWithoutExtension(source.filename)}.ico`,
+								);
 							}}
 						>
-							<Download size={16} /> Download ICO
-						</button>
+							Download ICO
+						</Button>
 					)}
-				</div>
+				</CardContent>
+				</Card>
 			</div>
 		</main>
 	);

@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Copy, Regex } from "lucide-react";
-import { compileRegexDsl } from "../lib/tool-utils";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "#/components/ui/button";
+import { Card, CardContent } from "#/components/ui/card";
+import HomeLink from "#/components/HomeLink";
+import { Input } from "#/components/ui/input";
+import { Label } from "#/components/ui/label";
+import { Textarea } from "#/components/ui/textarea";
 
 const defaultDsl = `and(
   startsWith("user_"),
@@ -18,17 +22,34 @@ function RegexPage() {
 	const [dsl, setDsl] = useState(defaultDsl);
 	const [sample, setSample] = useState("user_delta-42");
 
-	let regexOutput = "";
-	let regexError = "";
-	let matches = false;
+	const [regexOutput, setRegexOutput] = useState("");
+	const [regexError, setRegexError] = useState("");
+	const [matches, setMatches] = useState(false);
+	const workerRef = useRef<Worker | null>(null);
 
-	try {
-		regexOutput = compileRegexDsl(dsl);
-		matches = new RegExp(regexOutput).test(sample);
-	} catch (e) {
-		regexError =
-			e instanceof Error ? e.message : "The DSL could not be compiled.";
+	function getWorker() {
+		if (!workerRef.current) {
+			workerRef.current = new Worker(
+				new URL("../lib/worker.ts", import.meta.url),
+				{ type: "module" },
+			);
+		}
+		return workerRef.current;
 	}
+
+	useEffect(() => {
+		const worker = getWorker();
+		worker.onmessage = (e) => {
+			if (e.data.error) {
+				setRegexError(e.data.error);
+			} else {
+				setRegexError("");
+				setRegexOutput(e.data.result.regexOutput);
+				setMatches(e.data.result.matches);
+			}
+		};
+		worker.postMessage({ type: "COMPILE_REGEX", payload: { dsl, sample } });
+	}, [dsl, sample]);
 
 	async function copyText(value: string) {
 		try {
@@ -39,90 +60,62 @@ function RegexPage() {
 	}
 
 	return (
-		<main className="page-wrap px-4 py-8">
-			<div className="mx-auto max-w-4xl">
-				<div className="mb-8 flex items-center gap-4">
-					<div className="flex size-12 items-center justify-center rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)]">
-						<Regex size={24} />
-					</div>
-					<div>
-						<h1 className="text-2xl font-bold text-[var(--foreground)]">
-							Regex DSL
-						</h1>
-						<p className="text-[var(--muted-foreground)]">
-							Build regex patterns from readable functions
-						</p>
-					</div>
-				</div>
-
-				<div className="grid gap-6 lg:grid-cols-2">
-					<div className="rounded-xl border border-[var(--border)] p-5">
-						<h2 className="mb-4 font-semibold text-[var(--foreground)]">
-							DSL Input
-						</h2>
-						<textarea
-							className="h-72 w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-3 text-sm font-mono"
+		<main className="p-4 flex items-center justify-center min-h-screen bg-background text-foreground">
+			<div className="w-full max-w-4xl flex flex-col gap-6">
+				<HomeLink />
+				<Card className="w-full border-0 shadow-none bg-transparent">
+				<CardContent className="grid gap-6 lg:grid-cols-2 p-0">
+					<div className="flex flex-col gap-4">
+						<Label className="sr-only">DSL Input</Label>
+						<Textarea
+							className="min-h-[60vh] w-full font-mono text-sm resize-none border-input"
 							value={dsl}
 							onChange={(e) => setDsl(e.target.value)}
+							placeholder="Type your regex DSL here..."
 						/>
-						<p className="mt-3 text-sm text-[var(--muted-foreground)]">
-							Supported functions: and, or, not, group, optional, zeroOrMore,
-							oneOrMore, repeat, literal, startsWith, endsWith, digit, digits,
-							word, whitespace, any, charIn, charRange.
-						</p>
 					</div>
 
-					<div className="rounded-xl border border-[var(--border)] p-5">
-						<h2 className="mb-4 font-semibold text-[var(--foreground)]">
-							Test & Output
-						</h2>
-
-						<div className="mb-4">
-							<label className="block text-sm font-medium text-[var(--foreground)]">
-								Test Input
-								<input
-									className="mt-1 block w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-2"
-									value={sample}
-									onChange={(e) => setSample(e.target.value)}
-								/>
-							</label>
+					<div className="flex flex-col gap-4">
+						<div className="flex flex-col gap-2">
+							<Input
+								placeholder="Test Input"
+								value={sample}
+								onChange={(e) => setSample(e.target.value)}
+								className="border-input"
+							/>
 						</div>
 
 						{regexError ? (
-							<p className="text-sm text-[var(--destructive)]">{regexError}</p>
+							<p className="text-sm text-destructive min-h-[50vh] p-4 border border-destructive/20 bg-destructive/10 rounded">
+								{regexError}
+							</p>
 						) : (
-							<>
-								<div>
-									<label className="block text-sm font-medium text-[var(--foreground)]">
-										Generated Regex
-										<textarea
-											className="mt-1 h-32 w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-3 font-mono text-sm"
-											value={regexOutput}
-											readOnly
-										/>
-									</label>
-								</div>
-
-								<div className="mt-4 flex items-center gap-3">
-									<button
-										type="button"
-										className="flex items-center gap-2 rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium transition hover:bg-[var(--secondary)]"
+							<div className="flex flex-col gap-4">
+								<Textarea
+									className="min-h-[50vh] w-full font-mono text-sm resize-none border-input"
+									value={regexOutput}
+									readOnly
+								/>
+								<div className="flex items-center gap-3">
+									<Button
+										variant="outline"
 										onClick={() => copyText(regexOutput)}
 									>
-										<Copy size={16} /> Copy
-									</button>
+										Copy Regex
+									</Button>
 									<span
-										className={`text-sm ${matches ? "text-[var(--success)]" : "text-[var(--destructive)]"}`}
+										className={`text-sm tracking-tight ${matches ? "text-foreground font-semibold" : "text-muted-foreground"}`}
 									>
 										{matches
-											? `"${sample}" matches`
-											: `"${sample}" does not match`}
+											? `Matches "${sample}"`
+											: `No match for "${sample}"`}
 									</span>
 								</div>
-							</>
+							</div>
 						)}
 					</div>
-				</div>
+				</CardContent>
+				</Card>
 			</div>
 		</main>
 	);

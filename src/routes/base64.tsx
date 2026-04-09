@@ -1,6 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Copy, Download, Binary } from "lucide-react";
+import { Button } from "#/components/ui/button";
+import { Card, CardContent } from "#/components/ui/card";
+import { Input } from "#/components/ui/input";
+import { Label } from "#/components/ui/label";
+import HomeLink from "#/components/HomeLink";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "#/components/ui/select";
+import { Textarea } from "#/components/ui/textarea";
 import {
 	blobToDataUrl,
 	dataUrlToBlob,
@@ -71,122 +83,112 @@ function Base64Page() {
 	}
 
 	return (
-		<main className="page-wrap px-4 py-8">
-			<div className="mx-auto max-w-4xl">
-				<div className="mb-8 flex items-center gap-4">
-					<div className="flex size-12 items-center justify-center rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)]">
-						<Binary size={24} />
-					</div>
-					<div>
-						<h1 className="text-2xl font-bold text-[var(--foreground)]">
-							Image ↔ Base64
-						</h1>
-						<p className="text-[var(--muted-foreground)]">
-							Encode and decode images to data URLs
-						</p>
-					</div>
-				</div>
-
-				<div className="grid gap-6 lg:grid-cols-2">
-					<div className="rounded-xl border border-[var(--border)] p-5">
-						<h2 className="mb-4 font-semibold text-[var(--foreground)]">
-							Upload Image
-						</h2>
-						<label className="block">
-							<span className="sr-only">Choose image</span>
-							<input
+		<main className="p-4 flex items-center justify-center min-h-screen bg-background text-foreground">
+			<div className="w-full max-w-4xl flex flex-col gap-6">
+				<HomeLink />
+				<Card className="w-full border-0 shadow-none bg-transparent">
+				<CardContent className="grid gap-6 lg:grid-cols-2 p-0">
+					<div className="flex flex-col gap-6">
+						<div className="flex flex-col gap-2">
+							<Label htmlFor="image-upload" className="font-medium">
+								Upload Image
+							</Label>
+							<Input
+								id="image-upload"
 								type="file"
 								accept="image/*"
-								className="block w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-2 text-sm"
 								onChange={(e) => handleUpload(e.target.files?.[0] ?? null)}
 							/>
-						</label>
+						</div>
 						{image && (
-							<div className="mt-4 space-y-3">
-								<div className="flex justify-between text-sm text-[var(--muted-foreground)]">
-									<span>{image.filename}</span>
+							<div className="flex flex-col gap-2">
+								<div className="flex justify-between text-xs text-muted-foreground opacity-70">
+									<span className="truncate max-w-[200px]">
+										{image.filename}
+									</span>
 									<span>{image.sizeLabel}</span>
 								</div>
 								<img
 									src={image.dataUrl}
-									alt=""
-									className="max-h-48 rounded-lg object-contain"
+									alt="Source"
+									className="max-h-64 object-contain rounded-md border bg-muted/20 w-full"
 								/>
 							</div>
 						)}
 					</div>
 
-					<div className="rounded-xl border border-[var(--border)] p-5">
-						<h2 className="mb-4 font-semibold text-[var(--foreground)]">
-							Base64 Output
-						</h2>
-						<textarea
-							className="h-44 w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-3 text-sm font-mono"
+					<div className="flex flex-col gap-6">
+						<Textarea
+							className="h-44 w-full font-mono text-sm resize-none border-input"
 							value={base64Input}
 							onChange={(e) => setBase64Input(e.target.value)}
-							placeholder="Paste Base64 string or upload image"
+							placeholder="Paste Base64 string or upload image..."
 						/>
-						<div className="mt-4 flex flex-wrap gap-3">
-							<button
-								type="button"
-								className="flex items-center gap-2 rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] transition hover:opacity-90"
-								onClick={() => copyText(base64Input)}
-								disabled={!base64Input}
-							>
-								<Copy size={16} /> Copy
-							</button>
-							<button
-								type="button"
-								className="flex items-center gap-2 rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium transition hover:bg-[var(--secondary)]"
-								onClick={handleDecode}
-								disabled={!base64Input}
-							>
-								<Download size={16} /> Decode to Image
-							</button>
-						</div>
 
-						<div className="mt-4">
-							<label className="block text-sm font-medium text-[var(--foreground)]">
-								MIME Type
-								<select
-									className="mt-1 block w-full rounded-lg border border-[var(--input)] bg-[var(--background)] p-2"
-									value={mimeHint}
-									onChange={(e) => setMimeHint(e.target.value)}
+						<div className="flex flex-col gap-2">
+							<div className="flex flex-wrap items-center gap-2">
+								<Button
+									variant="default"
+									onClick={() => copyText(base64Input)}
+									disabled={!base64Input}
 								>
-									<option value="image/png">PNG</option>
-									<option value="image/jpeg">JPEG</option>
-									<option value="image/webp">WebP</option>
-									<option value="image/gif">GIF</option>
-								</select>
-							</label>
-						</div>
+									Copy Base64
+								</Button>
+								<Button
+									variant="outline"
+									onClick={handleDecode}
+									disabled={!base64Input}
+								>
+									Decode
+								</Button>
+							</div>
 
-						{error && (
-							<p className="mt-4 text-sm text-[var(--destructive)]">{error}</p>
-						)}
+							<div className="flex flex-col gap-2 mt-4">
+								<Label htmlFor="mime-hint" className="font-medium">
+									MIME Type Hint
+								</Label>
+								<Select value={mimeHint} onValueChange={setMimeHint}>
+									<SelectTrigger id="mime-hint">
+										<SelectValue placeholder="Select MIME Type" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="image/png">PNG</SelectItem>
+										<SelectItem value="image/jpeg">JPEG</SelectItem>
+										<SelectItem value="image/webp">WebP</SelectItem>
+										<SelectItem value="image/gif">GIF</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
+
+							{error && (
+								<p className="text-sm text-destructive mt-2">{error}</p>
+							)}
+						</div>
 
 						{decodedImage && (
-							<div className="mt-4 space-y-3">
-								<div className="flex justify-between text-sm text-[var(--muted-foreground)]">
-									<span>{decodedImage.filename}</span>
-									<span>{decodedImage.sizeLabel}</span>
+							<div className="flex flex-col gap-2 mt-auto">
+								<div className="flex justify-between items-center text-xs text-muted-foreground opacity-70">
+									<span className="truncate max-w-[200px]">
+										{decodedImage.filename}
+									</span>
+									<a
+										href={decodedUrl}
+										download={decodedName}
+										className="text-foreground hover:underline"
+									>
+										Download
+									</a>
 								</div>
 								<img
 									src={decodedImage.dataUrl}
-									alt=""
-									className="max-h-48 rounded-lg object-contain"
+									alt="Decoded output"
+									className="max-h-64 object-contain rounded-md border bg-muted/20 w-full"
 								/>
-								<a
-									href={decodedUrl}
-									download={decodedName}
-									className="flex items-center gap-2 text-sm text-[var(--primary)] hover:underline"
-								>
-									<Download size={16} /> Download
-								</a>
 							</div>
 						)}
 					</div>
-				</div>
+				</CardContent>
+				</Card>
 			</div>
 		</main>
 	);

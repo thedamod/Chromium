@@ -5,212 +5,51 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Core surfaces */
-  --background: #FFFFFF;
-  --foreground: #37352F;
-  --card: #FFFFFF;
-  --card-foreground: #37352F;
-  --popover: #FFFFFF;
-  --popover-foreground: #37352F;
-
-  /* Branding accent */
-  --primary: #abcfff;
-  --primary-foreground: #1B2733;
-
-  /* Neutrals: Pushed to #FAFAFA to be closer to #FFFFFF background */
-  --secondary: #FAFAFA;
-  --secondary-foreground: #37352F;
-  --muted: #FAFAFA;
-  --muted-foreground: #9B9A97;
-  --accent: #FAFAFA;
-  --accent-foreground: #37352F;
-
-  /* Semantic */
-  --destructive: #E03E3E;
-  --destructive-foreground: #FFFFFF;
-
-  /* Borders */
-  --border: rgba(55, 53, 47, 0.09);
-  --input: rgba(55, 53, 47, 0.12);
-  --ring: #abcfff;
-
-  /* Status */
-  --info: #0B6E99;
-  --info-foreground: #0B6E99;
-  --success: #0F7B6C;
-  --success-foreground: #0F7B6C;
-  --warning: #DFAB01;
-  --warning-foreground: #DFAB01;
-
-  /* Charts */
-  --chart-1: #0F7B6C;
-  --chart-2: #0B6E99;
-  --chart-3: #6940A5;
-  --chart-4: #D9730D;
-  --chart-5: #DFAB01;
-
-  /* Sidebar */
-  --sidebar: #FAFAFA;
-  --sidebar-foreground: #37352F;
-  --sidebar-primary: #abcfff;
-  --sidebar-primary-foreground: #1B2733;
-  --sidebar-accent: rgba(0, 0, 0, 0.04);
-  --sidebar-accent-foreground: #37352F;
-  --sidebar-border: rgba(55, 53, 47, 0.09);
-  --sidebar-ring: #abcfff;
-
-  /* Typography */
-  --font-sans: "Inter", ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Lora", Georgia, serif;
-  --font-mono: "SFMono-Regular", "Menlo", "Consolas", monospace;
-
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #000000;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #000000;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #000000;
   --radius: 0.375rem;
-
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
-
-  --color-text-default: #37352F;
-  --color-bg-default: #FFFFFF;
-  --color-pill-default: rgba(206, 205, 202, 0.5);
-
-  --color-text-gray: #9B9A97;
-  --color-bg-gray: #EBECED;
-  --color-pill-gray: rgba(155, 154, 151, 0.4);
-
-  --color-text-brown: #64473A;
-  --color-bg-brown: #E9E5E3;
-  --color-pill-brown: rgba(140, 46, 0, 0.2);
-
-  --color-text-orange: #D9730D;
-  --color-bg-orange: #FAEBDD;
-  --color-pill-orange: rgba(245, 93, 0, 0.2);
-
-  --color-text-yellow: #DFAB01;
-  --color-bg-yellow: #FBF3DB;
-  --color-pill-yellow: rgba(233, 168, 0, 0.2);
-
-  --color-text-green: #0F7B6C;
-  --color-bg-green: #DDEDEA;
-  --color-pill-green: rgba(0, 135, 107, 0.2);
-
-  --color-text-blue: #0B6E99;
-  --color-bg-blue: #DDEBF1;
-  --color-pill-blue: rgba(0, 120, 223, 0.2);
-
-  --color-text-purple: #6940A5;
-  --color-bg-purple: #EAE4F2;
-  --color-pill-purple: rgba(103, 36, 222, 0.2);
-
-  --color-text-pink: #AD1A72;
-  --color-bg-pink: #F4DFEB;
-  --color-pill-pink: rgba(221, 0, 129, 0.2);
-
-  --color-text-red: #E03E3E;
-  --color-bg-red: #FBE4E4;
-  --color-pill-red: rgba(255, 0, 26, 0.2);
 }
 
 .dark {
-  --background: #191919;
-  --foreground: rgba(255, 255, 255, 0.9);
-  --card: #202020;
-  --card-foreground: rgba(255, 255, 255, 0.9);
-  --popover: #252525;
-  --popover-foreground: rgba(255, 255, 255, 0.9);
-
-  --primary: #abcfff;
-  --primary-foreground: #191919;
-
-  --secondary: #222222;
-  --secondary-foreground: rgba(255, 255, 255, 0.8);
-  --muted: #222222;
-  --muted-foreground: rgba(255, 255, 255, 0.45);
-  --accent: #222222;
-  --accent-foreground: rgba(255, 255, 255, 0.8);
-
-  --destructive: #FF7369;
-  --destructive-foreground: #191919;
-
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: #abcfff;
-
-  --info: #529CCA;
-  --info-foreground: #529CCA;
-  --success: #4DAB9A;
-  --success-foreground: #4DAB9A;
-  --warning: #FFDC49;
-  --warning-foreground: #FFDC49;
-
-  --chart-1: #4DAB9A;
-  --chart-2: #529CCA;
-  --chart-3: #9A6DD7;
-  --chart-4: #FFA344;
-  --chart-5: #FFDC49;
-
-  --sidebar: #191919;
-  --sidebar-foreground: rgba(255, 255, 255, 0.8);
-  --sidebar-primary: #abcfff;
-  --sidebar-primary-foreground: #191919;
-  --sidebar-accent: rgba(255, 255, 255, 0.04);
-  --sidebar-accent-foreground: rgba(255, 255, 255, 0.8);
-  --sidebar-border: rgba(255, 255, 255, 0.06);
-  --sidebar-ring: #abcfff;
-
-  --font-sans: "Inter", ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Lora", Georgia, serif;
-  --font-mono: "SFMono-Regular", "Menlo", "Consolas", monospace;
-
-  --radius: 0.375rem;
-
-  --color-text-default: rgba(255, 255, 255, 0.9);
-  --color-bg-default: #2F3437;
-  --color-pill-default: rgba(206, 205, 202, 0.5);
-
-  --color-text-gray: rgba(151, 154, 155, 0.95);
-  --color-bg-gray: #454B4E;
-  --color-pill-gray: rgba(151, 154, 155, 0.5);
-
-  --color-text-brown: #937264;
-  --color-bg-brown: #434040;
-  --color-pill-brown: rgba(147, 114, 100, 0.5);
-
-  --color-text-orange: #FFA344;
-  --color-bg-orange: #594A3A;
-  --color-pill-orange: rgba(255, 163, 68, 0.5);
-
-  --color-text-yellow: #FFDC49;
-  --color-bg-yellow: #59563B;
-  --color-pill-yellow: rgba(255, 220, 73, 0.5);
-
-  --color-text-green: #4DAB9A;
-  --color-bg-green: #354C4B;
-  --color-pill-green: rgba(77, 171, 154, 0.5);
-
-  --color-text-blue: #529CCA;
-  --color-bg-blue: #364954;
-  --color-pill-blue: rgba(82, 156, 202, 0.5);
-
-  --color-text-purple: #9A6DD7;
-  --color-bg-purple: #443F57;
-  --color-pill-purple: rgba(154, 109, 215, 0.5);
-
-  --color-text-pink: #E255A1;
-  --color-bg-pink: #533B4C;
-  --color-pill-pink: rgba(226, 85, 161, 0.5);
-
-  --color-text-red: #FF7369;
-  --color-bg-red: #594141;
-  --color-pill-red: rgba(255, 115, 105, 0.5);
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #27272a;
+  --secondary-foreground: #ffffff;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #ffffff;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #ffffff;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #ffffff;
 }
 
 @theme inline {
-  --color-warning-foreground: var(--warning-foreground);
-  --color-warning: var(--warning);
-  --color-success-foreground: var(--success-foreground);
-  --color-success: var(--success);
-  --color-info-foreground: var(--info-foreground);
-  --color-info: var(--info);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -230,24 +69,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
-
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
@@ -263,45 +84,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(55, 53, 47, 0.16);
-  border-radius: 20px;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(55, 53, 47, 0.3);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.22);
-}
-
-.text-grad {
-  color: transparent;
-  background-image: linear-gradient(to right, var(--chart-1), var(--primary));
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-/* Utility: hide on desktop (md: 768px+) — bypasses Tailwind v4 specificity */
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none !important;
   }
 }

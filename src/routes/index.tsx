@@ -1,37 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Binary, FileImage, FileText, ImageUpscale, Regex } from "lucide-react";
 
 const tools = [
-	{
-		name: "Image ↔ Base64",
-		description: "Encode and decode images to Base64 data URLs",
-		icon: Binary,
-		href: "/base64",
-	},
-	{
-		name: "Image to ICO",
-		description: "Convert images to ICO format for favicons",
-		icon: FileImage,
-		href: "/ico",
-	},
-	{
-		name: "Markdown to PDF",
-		description: "Write markdown and export as PDF document",
-		icon: FileText,
-		href: "/pdf",
-	},
-	{
-		name: "Image Converter",
-		description: "Convert between PNG, JPEG, and WebP formats",
-		icon: ImageUpscale,
-		href: "/convert",
-	},
-	{
-		name: "Regex DSL",
-		description: "Build regex patterns from readable functions",
-		icon: Regex,
-		href: "/regex",
-	},
+	{ name: "Image ↔ Base64", href: "/base64" },
+	{ name: "Image to ICO", href: "/ico" },
+	{ name: "Markdown to PDF", href: "/pdf" },
+	{ name: "Image Converter", href: "/convert" },
+	{ name: "Image Compressor", href: "/compressor" },
+	{ name: "Regex DSL", href: "/regex" },
 ];
 
 export const Route = createFileRoute("/")({
@@ -40,33 +15,27 @@ export const Route = createFileRoute("/")({
 
 function Index() {
 	return (
-		<main className="page-wrap px-4 py-12">
-			<div className="mx-auto max-w-3xl">
-				<h1 className="mb-8 text-center text-2xl font-bold text-[var(--foreground)]">
-					Workshop Tools
+		<main className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
+			<div className="w-full max-w-sm flex flex-col gap-4">
+				<h1 className="text-xl font-medium tracking-tight mb-4">
+					Chromium Tools
 				</h1>
-
-				<div className="grid gap-3 sm:grid-cols-2">
+				<nav className="flex flex-col gap-2">
 					{tools.map((tool) => (
 						<Link
 							key={tool.name}
 							to={tool.href}
-							className="flex items-center gap-3 rounded-lg border border-[var(--border)] p-4 transition hover:bg-[var(--secondary)]"
+							className="group flex justify-between items-center py-3 border-b border-border hover:border-foreground transition-colors"
 						>
-							<div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)]">
-								<tool.icon size={18} />
-							</div>
-							<div>
-								<h2 className="font-medium text-[var(--foreground)]">
-									{tool.name}
-								</h2>
-								<p className="text-xs text-[var(--muted-foreground)]">
-									{tool.description}
-								</p>
-							</div>
+							<span className="text-sm font-mono tracking-tight">
+								{tool.name}
+							</span>
+							<span className="text-muted-foreground group-hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity font-mono text-xs">
+								→
+							</span>
 						</Link>
 					))}
-				</div>
+				</nav>
 			</div>
 		</main>
 	);

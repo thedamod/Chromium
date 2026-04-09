@@ -13,6 +13,7 @@ import { Route as RegexRouteImport } from './routes/regex'
 import { Route as PdfRouteImport } from './routes/pdf'
 import { Route as IcoRouteImport } from './routes/ico'
 import { Route as ConvertRouteImport } from './routes/convert'
+import { Route as CompressorRouteImport } from './routes/compressor'
 import { Route as Base64RouteImport } from './routes/base64'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -37,6 +38,11 @@ const ConvertRoute = ConvertRouteImport.update({
   path: '/convert',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompressorRoute = CompressorRouteImport.update({
+  id: '/compressor',
+  path: '/compressor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Base64Route = Base64RouteImport.update({
   id: '/base64',
   path: '/base64',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/base64': typeof Base64Route
+  '/compressor': typeof CompressorRoute
   '/convert': typeof ConvertRoute
   '/ico': typeof IcoRoute
   '/pdf': typeof PdfRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/base64': typeof Base64Route
+  '/compressor': typeof CompressorRoute
   '/convert': typeof ConvertRoute
   '/ico': typeof IcoRoute
   '/pdf': typeof PdfRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/base64': typeof Base64Route
+  '/compressor': typeof CompressorRoute
   '/convert': typeof ConvertRoute
   '/ico': typeof IcoRoute
   '/pdf': typeof PdfRoute
@@ -87,17 +96,27 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/base64'
+    | '/compressor'
     | '/convert'
     | '/ico'
     | '/pdf'
     | '/regex'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/base64' | '/convert' | '/ico' | '/pdf' | '/regex'
+  to:
+    | '/'
+    | '/about'
+    | '/base64'
+    | '/compressor'
+    | '/convert'
+    | '/ico'
+    | '/pdf'
+    | '/regex'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/base64'
+    | '/compressor'
     | '/convert'
     | '/ico'
     | '/pdf'
@@ -108,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   Base64Route: typeof Base64Route
+  CompressorRoute: typeof CompressorRoute
   ConvertRoute: typeof ConvertRoute
   IcoRoute: typeof IcoRoute
   PdfRoute: typeof PdfRoute
@@ -144,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConvertRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compressor': {
+      id: '/compressor'
+      path: '/compressor'
+      fullPath: '/compressor'
+      preLoaderRoute: typeof CompressorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/base64': {
       id: '/base64'
       path: '/base64'
@@ -172,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   Base64Route: Base64Route,
+  CompressorRoute: CompressorRoute,
   ConvertRoute: ConvertRoute,
   IcoRoute: IcoRoute,
   PdfRoute: PdfRoute,
